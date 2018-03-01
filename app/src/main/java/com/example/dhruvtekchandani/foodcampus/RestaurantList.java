@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -37,23 +38,27 @@ public class RestaurantList extends ArrayAdapter<RestaurantInformation> {
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         LayoutInflater inflater = context.getLayoutInflater();
         View listViewItem = inflater.inflate(R.layout.activity_rest_list_content,null,true);
         TextView restaurantTextView = (TextView) listViewItem.findViewById(R.id.restaurantName);
         TextView foodTypeTextView = (TextView) listViewItem.findViewById(R.id.foodType);
         TextView averageCostTextView = (TextView) listViewItem.findViewById(R.id.averageCost);
-        ImageView restaurantImageView = (ImageView) listViewItem.findViewById(R.id.restaurantImage);
+        final ImageView restaurantImageView = (ImageView) listViewItem.findViewById(R.id.restaurantImage);
 
         final ProgressBar pbRestList = listViewItem.findViewById(R.id.pbRestList);
-        RestaurantInformation restaurantInformation = restaurantList.get(position);
+        final RestaurantInformation restaurantInformation = restaurantList.get(position);
         restaurantTextView.setText(restaurantInformation.getRestName());
         foodTypeTextView.setText(restaurantInformation.getFoodAvailable());
         averageCostTextView.setText("Avg Cost: "+"$"+restaurantInformation.getRestAvgPrice() + " per person");
        // Picasso.with(context).load(restaurantInformation.getRestImageName()).networkPolicy(NetworkPolicy.OFFLINE).into(restaurantImageView);
-        Picasso.with(context).load(restaurantInformation.getRestImageName()).into(restaurantImageView,
-                new Callback() {
+
+
+        Picasso.with(context)
+                .load(restaurantInformation.getRestImageName())
+                .networkPolicy(NetworkPolicy.OFFLINE)
+                .into(restaurantImageView, new Callback() {
                     @Override
                     public void onSuccess() {
                         pbRestList.setVisibility(View.GONE);
@@ -61,9 +66,15 @@ public class RestaurantList extends ArrayAdapter<RestaurantInformation> {
 
                     @Override
                     public void onError() {
-
+                        // Try again online if cache failed
+                        Picasso.with(context)
+                                .load(restaurantInformation.getRestImageName())
+                                .placeholder(R.drawable.placeholder)
+                                .into(restaurantImageView);
                     }
                 });
+
+        //Picasso.with(context).setIndicatorsEnabled(true);
         return listViewItem;
     }
 }

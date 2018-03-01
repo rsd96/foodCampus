@@ -9,6 +9,57 @@
     tools:showIn="@layout/activity_restaurant_detail_view">
 
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbarRestDetail"
+        android:layout_width="match_parent"
+        android:layout_height="53dp"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="1dp">
+
+
+        <TextView
+            android:id="@+id/restaurantDetailName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="TextView"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabCall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="40dp"
+        android:background="@color/colorAccent"
+        android:clickable="true"
+        android:elevation="6dp"
+        android:src="@drawable/phone_white"
+        app:elevation="6dp"
+        app:layout_anchor="@id/toolbarRestDetail"
+        app:layout_anchorGravity="bottom|right|end"
+        app:layout_constraintBottom_toTopOf="@+id/cardView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.975"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
+
     <android.support.v7.widget.CardView
         android:id="@+id/cardView2"
         android:layout_width="match_parent"
@@ -21,7 +72,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@id/cardView4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/toolbarRestDetail">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -132,10 +183,8 @@
                     android:layout_alignStart="@+id/textView"
                     android:layout_below="@+id/textView"
                     android:text="bldg number"
-                    android:textAllCaps="true"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:textColor="#212121"
+                    android:textSize="14sp" />
             </RelativeLayout>
 
 
@@ -187,4 +236,6 @@
     </android.support.v7.widget.CardView>
 
 </android.support.constraint.ConstraintLayout>
+
+
 

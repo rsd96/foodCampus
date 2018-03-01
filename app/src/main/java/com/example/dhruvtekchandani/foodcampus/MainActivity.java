@@ -58,6 +58,26 @@ public class MainActivity extends AppCompatActivity {
         databaseRestaurantInformation = FirebaseDatabase.getInstance().getReference("RestaurantInformation");
         restaurantList = new ArrayList<>();
 
+
+
+        databaseRestaurantInformation.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                restaurantList.clear();
+                for(DataSnapshot restaurantSnapshot : dataSnapshot.getChildren()){
+                    RestaurantInformation restaurantInformation = restaurantSnapshot.getValue(RestaurantInformation.class);
+                    restaurantList.add(restaurantInformation);
+                }
+                RestaurantList adapter = new RestaurantList(MainActivity.this, restaurantList);
+                listViewRestaurantInformation.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         listViewRestaurantInformation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -77,23 +97,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        databaseRestaurantInformation.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                restaurantList.clear();
-                for(DataSnapshot restaurantSnapshot : dataSnapshot.getChildren()){
-                    RestaurantInformation restaurantInformation = restaurantSnapshot.getValue(RestaurantInformation.class);
-                    restaurantList.add(restaurantInformation);
-                }
-                RestaurantList adapter = new RestaurantList(MainActivity.this, restaurantList);
-                listViewRestaurantInformation.setAdapter(adapter);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
     }
 }

@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.github.chrisbanes.photoview.PhotoView;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -17,7 +19,6 @@ import java.util.ArrayList;
 
 public class ImageAdapter extends PagerAdapter {
     private Context mContext;
-    private int[] mImageIds = new int[]{R.drawable.delishmenu1,R.drawable.delishmenu2,R.drawable.delishmenu3,R.drawable.delishmenu4,R.drawable.delishmenu5,R.drawable.delishmenu6};
     private ArrayList<String> mMenuImageList;
     ImageAdapter(Context context, ArrayList<String> menuImageList){
         mContext = context;
@@ -35,14 +36,29 @@ public class ImageAdapter extends PagerAdapter {
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        PhotoView photoView = new PhotoView(mContext);
+    public Object instantiateItem(ViewGroup container, final int position) {
+        final PhotoView photoView = new PhotoView(mContext);
         photoView.setScaleType(ImageView.ScaleType.CENTER);
         photoView.setAdjustViewBounds(true);
-        //ImageView imageView = new ImageView(mContext);
-        //imageView.setScaleType(ImageView.ScaleType.FIT_START);
-        //imageView.setAdjustViewBounds(true);
-        Picasso.with(mContext).load(mMenuImageList.get(position)).into(photoView);
+        Picasso.with(mContext)
+                .load(mMenuImageList.get(position))
+                .networkPolicy(NetworkPolicy.OFFLINE)
+                .into(photoView, new Callback() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onError() {
+                        // Try again online if cache failed
+                        Picasso.with(mContext)
+                                .load(mMenuImageList.get(position))
+                                .placeholder(R.drawable.placeholder)
+                                .into(photoView);
+                    }
+                });
+        //Picasso.with(mContext).setIndicatorsEnabled(true);
         container.addView(photoView, 0);
         return photoView;
     }

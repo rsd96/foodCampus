@@ -3,17 +3,18 @@ package com.example.dhruvtekchandani.foodcampus;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -47,6 +48,7 @@ public class RestaurantDetailView extends AppCompatActivity {
         dbRef = FirebaseDatabase.getInstance().getReference();
         locationsList = new ArrayList<>();
 
+        /*
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(false);
@@ -55,8 +57,20 @@ public class RestaurantDetailView extends AppCompatActivity {
 
         View customAppbar = inflater.inflate(R.layout.appbar_rest_detail, null);
 
-        final TextView restaurantName = (TextView) customAppbar.findViewById(R.id.restaurantDetailName);
-        final ImageButton callButton = (ImageButton) customAppbar.findViewById(R.id.imageButton2);
+        actionBar.setCustomView(customAppbar);
+        actionBar.setDisplayShowCustomEnabled(true);*/
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbarRestDetail);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        myToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+
+
+
+        final TextView restaurantName = (TextView) findViewById(R.id.restaurantDetailName);
+        final FloatingActionButton callButton = (FloatingActionButton) findViewById(R.id.fabCall);
 
 
         dbRef.child("RestaurantInformation").addValueEventListener(new ValueEventListener() {
@@ -107,10 +121,6 @@ public class RestaurantDetailView extends AppCompatActivity {
 
             }
         });
-
-
-        actionBar.setCustomView(customAppbar);
-        actionBar.setDisplayShowCustomEnabled(true);
 
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        toolbar.setTitle("");
