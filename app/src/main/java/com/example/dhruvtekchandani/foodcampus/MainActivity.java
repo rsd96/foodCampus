@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.d("amin", "working ... ");
+        Log.d("main", "working ... ");
 
         listViewRestaurantInformation = (ListView) findViewById(R.id.restaurantImage);
         databaseRestaurantInformation = FirebaseDatabase.getInstance().getReference("RestaurantInformation");
