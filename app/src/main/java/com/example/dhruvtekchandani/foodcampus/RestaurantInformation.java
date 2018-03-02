@@ -8,6 +8,10 @@ public class RestaurantInformation {
 
     String restName;
     String restLocation;
+    String restImageAndroid;
+
+
+
     String restImageName;
     String restTimingsOffSession;
     String restTimingsOnSession;
@@ -21,12 +25,12 @@ public class RestaurantInformation {
     public RestaurantInformation(){}
 
 
-    public RestaurantInformation(String restName, String restLocation, String restImageName, String restTimingsOffSession, String restTimingsOnSession,
+    public RestaurantInformation(String restName, String restLocation, String restImageAndroid, String restTimingsOffSession, String restTimingsOnSession,
                                  String restSaturdayTimings, String restSundayTimings, String restAvgPrice, String paymentMethod, String foodAvailable,
                                  String phoneNumber) {
         this.restName = restName;
         this.restLocation = restLocation;
-        this.restImageName = restImageName;
+        this.restImageAndroid = restImageAndroid;
         this.restTimingsOffSession = restTimingsOffSession;
         this.restTimingsOnSession = restTimingsOnSession;
         this.restSaturdayTimings = restSaturdayTimings;
@@ -45,8 +49,8 @@ public class RestaurantInformation {
         this.restLocation = restLocation;
     }
 
-    public void setRestImageName(String restImageName) {
-        this.restImageName = restImageName;
+    public void setRestImageAndroid(String restImageAndroid) {
+        this.restImageAndroid = restImageAndroid;
     }
 
     public void setRestTimingsOffSession(String restTimingsOffSession) {
@@ -89,8 +93,16 @@ public class RestaurantInformation {
         return restLocation;
     }
 
+    public String getRestImageAndroid() {
+        return restImageAndroid;
+    }
+
     public String getRestImageName() {
         return restImageName;
+    }
+
+    public void setRestImageName(String restImageName) {
+        this.restImageName = restImageName;
     }
 
     public String getRestTimingsOffSession() {

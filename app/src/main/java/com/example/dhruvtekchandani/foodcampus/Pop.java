@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -173,48 +175,61 @@ public class Pop extends Activity{
         switch(day){
 
             case 1:
-                mondayText.setTextColor(Color.RED);
+                sundayText.setTextColor(Color.RED);
                 break;
 
             case 2:
-                tuesdayText.setTextColor(Color.RED);
+                mondayText.setTextColor(Color.RED);
                 break;
 
             case 3:
-                wednesdayText.setTextColor(Color.RED);
+                tuesdayText.setTextColor(Color.RED);
                 break;
 
             case 4:
-                thursdayText.setTextColor(Color.RED);
+                wednesdayText.setTextColor(Color.RED);
                 break;
 
             case 5:
-                fridayText.setTextColor(Color.RED);
+                thursdayText.setTextColor(Color.RED);
                 break;
 
             case 6:
-                saturdayText.setTextColor(Color.RED);
+                fridayText.setTextColor(Color.RED);
                 break;
 
             case 7:
-                sundayText.setTextColor(Color.RED);
+                saturdayText.setTextColor(Color.RED);
                 break;
         }
 
     }
 
     public void changeTimings(){
+
+
         String monthResult = new SimpleDateFormat("MMMM").format(Calendar.getInstance().getTime());
         Calendar calender = Calendar.getInstance();
         int date = calender.get(Calendar.DATE);
         String dateString = String.valueOf(date);
         for(int i=0;i<autumnList.size();i++){
             final RestaurantYearlyTimings restaurantYearlyTimings = autumnList.get(i);
+            String startDate = restaurantYearlyTimings.getStartDate() + "/" + restaurantYearlyTimings.getStartMonth();
+
+            try {
+                if (new SimpleDateFormat("d/MMMM").parse(startDate)
+                        .before(new SimpleDateFormat("d/MMMM")
+                                .parse(new SimpleDateFormat("d/MMMM").format(Calendar.getInstance().getTime())))){
+                    Log.d("POP TIME ", "Autumn is after current date !!!!!!!" );
+
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
             if(dateString.equals(restaurantYearlyTimings.startDate) && monthResult.equals(restaurantYearlyTimings.startMonth)){
                 sessionAutum = true;
-                winterCheck = false;
-                sessionSpring = false;
-                summerCheack = false;
+                summerCheack = winterCheck = sessionSpring = false;
             }
         }
 

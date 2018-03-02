@@ -1,7 +1,6 @@
 package com.example.dhruvtekchandani.foodcampus;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -42,7 +41,7 @@ public class RestaurantList extends ArrayAdapter<RestaurantInformation> {
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         LayoutInflater inflater = context.getLayoutInflater();
-        View listViewItem = inflater.inflate(R.layout.activity_rest_list_content,null,true);
+        View listViewItem = inflater.inflate(R.layout.activity_restaurant_view,null,true);
         TextView restaurantTextView = (TextView) listViewItem.findViewById(R.id.restaurantName);
         TextView foodTypeTextView = (TextView) listViewItem.findViewById(R.id.foodType);
         TextView averageCostTextView = (TextView) listViewItem.findViewById(R.id.averageCost);
@@ -79,11 +78,7 @@ public class RestaurantList extends ArrayAdapter<RestaurantInformation> {
 
                                     @Override
                                     public void onError() {
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                                        builder.setTitle("Network unavailable !");
-                                        builder.setMessage("No internet connection. Make sure Wi-Fi or cellular data is turned on, then try again");
-                                        builder.setPositiveButton("Try Again", null);
-                                        builder.create().show();
+
                                     }
                                 });
                     }
