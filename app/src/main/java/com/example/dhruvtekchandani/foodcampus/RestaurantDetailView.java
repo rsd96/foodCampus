@@ -12,7 +12,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -87,7 +86,7 @@ public class RestaurantDetailView extends AppCompatActivity {
                                 public void onClick(View view) {
 
                                     AlertDialog.Builder builder = new AlertDialog.Builder(RestaurantDetailView.this);
-                                    builder.setTitle("Call " + bundle.getString("RestaurantName") + " ?");
+                                    builder.setTitle("Call " + bundle.getString("RestaurantName"));
                                     builder.setMessage("Are you sure you would like to call " + bundle.getString("RestaurantName") + " ?");
                                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                         @Override
@@ -210,7 +209,7 @@ public class RestaurantDetailView extends AppCompatActivity {
         final TextView restaurantName = (TextView) findViewById(R.id.restaurantDetailName);
         restaurantName.setText(bundle.getString("RestaurantName"));
       //  restaurantChosen = restaurantName.getText().toString();
-        CardView detailMapButton = findViewById(R.id.cardView2);
+        View detailMapButton = findViewById(R.id.btnGetDirection);
         detailMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

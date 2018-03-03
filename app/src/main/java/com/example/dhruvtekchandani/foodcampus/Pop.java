@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -34,21 +34,42 @@ public class Pop extends Activity{
     DatabaseReference restaurantWinter;
     DatabaseReference databaseRestaurantInformation;
 
-    List<RestaurantYearlyTimings> autumnList;
-    List<RestaurantYearlyTimings> springList;
-    List<RestaurantYearlyTimings> summerList;
-    List<RestaurantYearlyTimings> winterList;
+    RestaurantYearlyTimings autumnList = new RestaurantYearlyTimings();
+    RestaurantYearlyTimings springList = new RestaurantYearlyTimings();
+    RestaurantYearlyTimings summerList = new RestaurantYearlyTimings();
+    RestaurantYearlyTimings winterList = new RestaurantYearlyTimings();
     List<RestaurantInformation> restaurantTimings;
 
     Boolean summerCheack = true;
     Boolean winterCheck = false;
     Boolean sessionAutum = false;
     Boolean sessionSpring = false;
+
     String restaurantChosen = "";
+    TextView saturdayText;
+    TextView sundayText;
+    TextView mondayText;
+    TextView tuesdayText;
+    TextView wednesdayText;
+    TextView thursdayText;
+    TextView fridayText;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.popupwindow);
+
+
+        Bundle bundle = getIntent().getExtras();
+        restaurantChosen = bundle.getString("RestaurantName");
+        saturdayText = (TextView) findViewById(R.id.saturdayText);
+        sundayText = (TextView) findViewById(R.id.sundayText);
+        mondayText = (TextView) findViewById(R.id.mondayText);
+        tuesdayText = (TextView) findViewById(R.id.tuesdayText);
+        wednesdayText = (TextView) findViewById(R.id.wednesdayText);
+        thursdayText = (TextView) findViewById(R.id.thursdayText);
+        fridayText = (TextView) findViewById(R.id.fridayText);
+
 
         databaseRestaurantInformation = FirebaseDatabase.getInstance().getReference("RestaurantInformation");
         restaurantAutumn = FirebaseDatabase.getInstance().getReference("RestaurantAutum");
@@ -56,13 +77,9 @@ public class Pop extends Activity{
         restaurantSummer = FirebaseDatabase.getInstance().getReference("RestaurantSummer");
         restaurantWinter = FirebaseDatabase.getInstance().getReference("RestaurantWinter");
 
-        autumnList = new ArrayList<>();
-        springList = new ArrayList<>();
-        summerList = new ArrayList<>();
-        winterList = new ArrayList<>();
         restaurantTimings = new ArrayList<>();
 
-        setContentView(R.layout.popupwindow);
+
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         WindowManager.LayoutParams xmp = getWindow().getAttributes();
@@ -70,8 +87,8 @@ public class Pop extends Activity{
         xmp.y = -180;
         int width = dm.widthPixels;
         int height = dm.heightPixels;
-        getWindow().setLayout((int)(width*0.6),(int) (height*0.4));
-
+        //getWindow().setLayout((int)(width*0.6),(int) (height*0.6));
+        getWindow().setGravity(Gravity.CENTER_VERTICAL);
         highlightToRed();
     }
 
@@ -82,10 +99,10 @@ public class Pop extends Activity{
         restaurantAutumn.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                autumnList.clear();
+
                 for (DataSnapshot timingsSnapshots : dataSnapshot.getChildren()) {
                     RestaurantYearlyTimings yearlyTimingsList = timingsSnapshots.getValue(RestaurantYearlyTimings.class);
-                    autumnList.add(yearlyTimingsList);
+                    autumnList = yearlyTimingsList;
                 }
                 changeTimings();
             }
@@ -97,13 +114,12 @@ public class Pop extends Activity{
         restaurantSpring.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                springList.clear();
+
                 for(DataSnapshot timingsSnapshot: dataSnapshot.getChildren()){
                     RestaurantYearlyTimings yearlyTimingsList = timingsSnapshot.getValue(RestaurantYearlyTimings.class);
-                    springList.add(yearlyTimingsList);
+                    springList = yearlyTimingsList;
+                    changeTimings();
                 }
-                changeTimings();
-
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -113,10 +129,10 @@ public class Pop extends Activity{
         restaurantSummer.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                summerList.clear();
+
                 for(DataSnapshot timingsSnapshot: dataSnapshot.getChildren()){
                     RestaurantYearlyTimings yearlyTimingsList = timingsSnapshot.getValue(RestaurantYearlyTimings.class);
-                    summerList.add(yearlyTimingsList);
+                    summerList = yearlyTimingsList;
                 }
                 changeTimings();
 
@@ -130,10 +146,10 @@ public class Pop extends Activity{
         restaurantWinter.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                winterList.clear();
+
                 for(DataSnapshot timingsSnapshot: dataSnapshot.getChildren()){
                     RestaurantYearlyTimings yearlyTimingsList = timingsSnapshot.getValue(RestaurantYearlyTimings.class);
-                    winterList.add(yearlyTimingsList);
+                    winterList = yearlyTimingsList;
                 }
                 changeTimings();
 
@@ -212,114 +228,82 @@ public class Pop extends Activity{
         Calendar calender = Calendar.getInstance();
         int date = calender.get(Calendar.DATE);
         String dateString = String.valueOf(date);
-        for(int i=0;i<autumnList.size();i++){
-            final RestaurantYearlyTimings restaurantYearlyTimings = autumnList.get(i);
-            String startDate = restaurantYearlyTimings.getStartDate() + "/" + restaurantYearlyTimings.getStartMonth();
 
-            try {
-                if (new SimpleDateFormat("d/MMMM").parse(startDate)
-                        .before(new SimpleDateFormat("d/MMMM")
-                                .parse(new SimpleDateFormat("d/MMMM").format(Calendar.getInstance().getTime())))){
-                    Log.d("POP TIME ", "Autumn is after current date !!!!!!!" );
-
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            if(dateString.equals(restaurantYearlyTimings.startDate) && monthResult.equals(restaurantYearlyTimings.startMonth)){
-                sessionAutum = true;
-                summerCheack = winterCheck = sessionSpring = false;
-            }
+        String startDate = autumnList.getStartDate() + "/" + autumnList.getStartMonth();
+        if (compareTime(startDate)){
+            sessionAutum = true;
+            summerCheack = winterCheck = sessionSpring = false;
         }
 
-        for(int i=0;i<springList.size();i++){
-            final RestaurantYearlyTimings restaurantYearlyTimings = springList.get(i);
-            if(dateString.equals(restaurantYearlyTimings.startDate) && monthResult.equals(restaurantYearlyTimings.startMonth)){
-                sessionAutum = false;
-                winterCheck = false;
-                sessionSpring = true;
-                summerCheack = false;
-            }
+        startDate = springList.getStartDate() + "/" + springList.getStartMonth();
+        if(compareTime(startDate)){
+            sessionSpring = true;
+            sessionAutum = winterCheck = summerCheack = false;
         }
 
-        for(int i=0;i<summerList.size();i++){
-            final RestaurantYearlyTimings restaurantYearlyTimings = summerList.get(i);
-            if(dateString.equals(restaurantYearlyTimings.startDate) && monthResult.equals(restaurantYearlyTimings.startMonth)){
-                sessionAutum = false;
-                winterCheck = false;
-                sessionSpring = false;
-                summerCheack = true;
-            }
+
+        startDate = summerList.getStartDate() + "/" + summerList.getStartMonth();
+        if(compareTime(startDate)){
+            summerCheack = true;
+            sessionAutum = winterCheck = sessionSpring = false;
         }
 
-        for(int i=0;i<winterList.size();i++){
-            final RestaurantYearlyTimings restaurantYearlyTimings = winterList.get(i);
-            if(dateString.equals(restaurantYearlyTimings.startDate) && monthResult.equals(restaurantYearlyTimings.startMonth)){
-                sessionAutum = false;
-                winterCheck = true;
-                sessionSpring = false;
-                summerCheack = false;
-            }
+        startDate = winterList.getStartDate() + "/" + winterList.getStartMonth();
+        if(compareTime(startDate)){
+            winterCheck = true;
+            sessionAutum = sessionSpring = summerCheack = false;
         }
+
         displayTimings();
     }
 
-    public void displayTimings(){
-        Bundle bundle = getIntent().getExtras();
-        restaurantChosen = bundle.getString("RestaurantName");
-        TextView saturdayText = (TextView) findViewById(R.id.saturdayText);
-        TextView sundayText = (TextView) findViewById(R.id.sundayText);
-        TextView mondayText = (TextView) findViewById(R.id.mondayText);
-        TextView tuesdayText = (TextView) findViewById(R.id.tuesdayText);
-        TextView wednesdayText = (TextView) findViewById(R.id.wednesdayText);
-        TextView thursdayText = (TextView) findViewById(R.id.thursdayText);
-        TextView fridayText = (TextView) findViewById(R.id.fridayText);
+    boolean compareTime(String startDate) {
 
+        try {
+            if (new SimpleDateFormat("d/MMMM").parse(startDate)
+                    .before(new SimpleDateFormat("d/MMMM")
+                            .parse(new SimpleDateFormat("d/MMMM").format(Calendar.getInstance().getTime())))){
+                return true;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+
+    public void displayTimings(){
         for(int i =0; i<restaurantTimings.size() ;i++ ){
             final RestaurantInformation restaurantInformation = restaurantTimings.get(i);
-            if(summerCheack == true){
 
-                if(restaurantChosen.toString().equals(restaurantInformation.getRestName().toString())){
-                    mondayText.setText("Mon: "+restaurantInformation.restTimingsOffSession);
-                    tuesdayText.setText("Tue:  "+restaurantInformation.restTimingsOffSession);
-                    wednesdayText.setText("Wed: "+restaurantInformation.restTimingsOffSession);
-                    thursdayText.setText("Thu: "+restaurantInformation.restTimingsOffSession);
-                    fridayText.setText("Fri:  "+restaurantInformation.restTimingsOffSession);
-                    saturdayText.setText("Sat: "+restaurantInformation.restSaturdayTimings);
-                    sundayText.setText("Sun: "+restaurantInformation.restSundayTimings);
-                }
-            }else if(winterCheck == true){
-                if(restaurantChosen.toString().equals(restaurantInformation.getRestName().toString())){
-                    mondayText.setText("Mon: "+restaurantInformation.restTimingsOffSession);
-                    tuesdayText.setText("Tue:  "+restaurantInformation.restTimingsOffSession);
-                    wednesdayText.setText("Wed: "+restaurantInformation.restTimingsOffSession);
-                    thursdayText.setText("Thu: "+restaurantInformation.restTimingsOffSession);
-                    fridayText.setText("Fri:  "+restaurantInformation.restTimingsOffSession);
-                    saturdayText.setText("Sat: "+restaurantInformation.restSaturdayTimings);
-                    sundayText.setText("Sun: "+restaurantInformation.restSundayTimings);
-                }
-            }else if(sessionAutum == true){
-                    if(restaurantChosen.toString().equals(restaurantInformation.getRestName().toString())) {
-                        mondayText.setText("Mon: " + restaurantInformation.restTimingsOnSession);
-                        tuesdayText.setText("Tue:  " + restaurantInformation.restTimingsOnSession);
-                        wednesdayText.setText("Wed: " + restaurantInformation.restTimingsOnSession);
-                        thursdayText.setText("Thu: " + restaurantInformation.restTimingsOnSession);
-                        fridayText.setText("Fri:  " + restaurantInformation.restTimingsOnSession);
-                        saturdayText.setText("Sat: " + restaurantInformation.restSaturdayTimings);
-                        sundayText.setText("Sun: " + restaurantInformation.restSundayTimings);
-                    }
-                }else if(sessionSpring == true){
-                    if(restaurantChosen.toString().equals(restaurantInformation.getRestName().toString())) {
-                        mondayText.setText("Mon: " + restaurantInformation.restTimingsOnSession);
-                        tuesdayText.setText("Tue:  " + restaurantInformation.restTimingsOnSession);
-                        wednesdayText.setText("Wed: " + restaurantInformation.restTimingsOnSession);
-                        thursdayText.setText("Thu: " + restaurantInformation.restTimingsOnSession);
-                        fridayText.setText("Fri:  " + restaurantInformation.restTimingsOnSession);
-                        saturdayText.setText("Sat: " + restaurantInformation.restSaturdayTimings);
-                        sundayText.setText("Sun: " + restaurantInformation.restSundayTimings);
-                    }
+            if (restaurantChosen.equals(restaurantInformation.getRestName().toString())) {
+                if (summerCheack == true || winterCheck == true) {
+                    setTextToOffSession(restaurantInformation);
+                } else {
+                    setTextToOnSession(restaurantInformation);
                 }
             }
         }
+    }
+
+    void setTextToOnSession(RestaurantInformation restaurantInformation) {
+        mondayText.setText("Mon: " + restaurantInformation.restTimingsOnSession);
+        tuesdayText.setText("Tue:  " + restaurantInformation.restTimingsOnSession);
+        wednesdayText.setText("Wed: " + restaurantInformation.restTimingsOnSession);
+        thursdayText.setText("Thu: " + restaurantInformation.restTimingsOnSession);
+        fridayText.setText("Fri:  " + restaurantInformation.restTimingsOnSession);
+        saturdayText.setText("Sat: " + restaurantInformation.restSaturdayTimings);
+        sundayText.setText("Sun: " + restaurantInformation.restSundayTimings);
+    }
+
+    void setTextToOffSession(RestaurantInformation restaurantInformation) {
+        mondayText.setText("Mon: "+restaurantInformation.restTimingsOffSession);
+        tuesdayText.setText("Tue:  "+restaurantInformation.restTimingsOffSession);
+        wednesdayText.setText("Wed: "+restaurantInformation.restTimingsOffSession);
+        thursdayText.setText("Thu: "+restaurantInformation.restTimingsOffSession);
+        fridayText.setText("Fri:  "+restaurantInformation.restTimingsOffSession);
+        saturdayText.setText("Sat: "+restaurantInformation.restSaturdayTimings);
+        sundayText.setText("Sun: "+restaurantInformation.restSundayTimings);
+    }
 }

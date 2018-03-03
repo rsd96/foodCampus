@@ -31,7 +31,7 @@ public class RestaurantList extends ArrayAdapter<RestaurantInformation> {
 
 
     public RestaurantList(Activity context, List<RestaurantInformation> restaurantList ){
-        super(context,R.layout.activity_restaurant_view,restaurantList);
+        super(context,R.layout.rest_list_content,restaurantList);
         this.context = context;
         this.restaurantList = restaurantList;
     }
@@ -41,7 +41,7 @@ public class RestaurantList extends ArrayAdapter<RestaurantInformation> {
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         LayoutInflater inflater = context.getLayoutInflater();
-        View listViewItem = inflater.inflate(R.layout.activity_restaurant_view,null,true);
+        View listViewItem = inflater.inflate(R.layout.rest_list_content,null,true);
         TextView restaurantTextView = (TextView) listViewItem.findViewById(R.id.restaurantName);
         TextView foodTypeTextView = (TextView) listViewItem.findViewById(R.id.foodType);
         TextView averageCostTextView = (TextView) listViewItem.findViewById(R.id.averageCost);
@@ -57,6 +57,7 @@ public class RestaurantList extends ArrayAdapter<RestaurantInformation> {
 
         Picasso.with(context)
                 .load(restaurantInformation.getRestImageName())
+                .placeholder(R.drawable.placeholder2)
                 .networkPolicy(NetworkPolicy.OFFLINE)
                 .into(restaurantImageView, new Callback() {
                     @Override
@@ -69,7 +70,7 @@ public class RestaurantList extends ArrayAdapter<RestaurantInformation> {
                         // Try again online if cache failed
                         Picasso.with(context)
                                 .load(restaurantInformation.getRestImageName())
-                                .placeholder(R.drawable.placeholder)
+                                .placeholder(R.drawable.placeholder2)
                                 .into(restaurantImageView, new Callback() {
                                     @Override
                                     public void onSuccess() {

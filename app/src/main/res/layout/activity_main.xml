@@ -4,22 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.dhruvtekchandani.foodcampus.MainActivity">
+    tools:context="com.example.dhruvtekchandani.foodcampus.MainActivity"
+    android:background="#eeeeee">
 
+    <!--android:layout_marginBottom="8dp"-->
+    <!--android:layout_marginEnd="8dp"-->
+    <!--android:layout_marginStart="8dp"-->
+    <!--android:layout_marginTop="8dp"-->
+    <!--android:dividerHeight="5dp"-->
 
     <ListView
         android:id="@+id/restaurantImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+
         android:divider="@android:color/transparent"
-        android:dividerHeight="10dp"
+
         android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="#eeeeee"/>
 
         <!---->
         <!--android:layout_marginEnd="8dp"-->
