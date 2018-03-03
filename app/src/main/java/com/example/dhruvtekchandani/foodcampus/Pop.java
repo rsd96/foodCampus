@@ -224,11 +224,6 @@ public class Pop extends Activity{
     public void changeTimings(){
 
 
-        String monthResult = new SimpleDateFormat("MMMM").format(Calendar.getInstance().getTime());
-        Calendar calender = Calendar.getInstance();
-        int date = calender.get(Calendar.DATE);
-        String dateString = String.valueOf(date);
-
         String startDate = autumnList.getStartDate() + "/" + autumnList.getStartMonth();
         if (compareTime(startDate)){
             sessionAutum = true;

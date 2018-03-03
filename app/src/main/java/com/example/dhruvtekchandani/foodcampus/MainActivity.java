@@ -84,7 +84,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, RestaurantDetailView.class);
                 RestaurantInformation restaurantInformation = restaurantList.get(i);
                 intent.putExtra("RestaurantName",restaurantInformation.getRestName());
-                intent.putExtra("RestaurantTimings",restaurantInformation.getRestTimingsOffSession());
+                intent.putExtra("RestaurantOnTimings",restaurantInformation.getRestTimingsOnSession());
+                intent.putExtra("RestaurantOffTimings",restaurantInformation.getRestTimingsOffSession());
                 intent.putExtra("RestaurantPayment",restaurantInformation.getPaymentMethod());
                 intent.putExtra("RestaurantLocation",restaurantInformation.getRestLocation());
                 startActivity(intent);
